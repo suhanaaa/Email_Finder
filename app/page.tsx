@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 interface EmailResponse {
   valid_emails: {
@@ -51,13 +52,18 @@ export default function Home() {
       });
 
       if (!res.ok) {
-        throw new Error("Failed to fetch data");
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Failed to fetch data");
       }
 
       const data = await res.json();
       setResponse(data);
-    } catch (err) {
-      setError("An error occurred while fetching the data");
+    } catch (error: unknown) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : "An error occurred while fetching the data"
+      );
     } finally {
       setLoading(false);
     }
@@ -232,12 +238,15 @@ export default function Home() {
                 >
                   <div className="flex items-center space-x-4 mb-4">
                     {email.avatar && (
-                      <img
+                      <Image
                         src={email.avatar}
                         alt="Avatar"
-                        className="w-12 h-12 rounded-full ring-2 ring-blue-500/30"
+                        width={48}
+                        height={48}
+                        className="rounded-full ring-2 ring-blue-500/30"
                         onError={(e) => {
-                          (e.target as HTMLImageElement).src =
+                          const img = e.target as HTMLImageElement;
+                          img.src =
                             "https://www.gravatar.com/avatar/default?d=mp";
                         }}
                       />

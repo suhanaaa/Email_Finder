@@ -16,11 +16,15 @@ export async function POST(request: Request) {
       }
     );
 
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     const data = await response.json();
     return NextResponse.json(data);
-  } catch (error) {
+  } catch (error: unknown) {
     return NextResponse.json(
-      { error: "Failed to fetch data" },
+      { error: error instanceof Error ? error.message : "An error occurred" },
       { status: 500 }
     );
   }
