@@ -303,8 +303,8 @@ export default function Home() {
                 <div className="mb-4 text-5xl">🔍</div>
                 <p className="text-lg mb-2">No email variations found</p>
                 <p className="text-sm opacity-75">
-                  We couldn't find any valid email variations for this name and
-                  domain combination.
+                  We couldn&apos;t find any valid email variations for this name
+                  and domain combination.
                 </p>
               </div>
             )}
