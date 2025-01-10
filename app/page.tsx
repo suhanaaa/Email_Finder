@@ -215,76 +215,99 @@ export default function Home() {
           </div>
         )}
 
-        {response && response.valid_emails.length > 0 && (
+        {response && (
           <div className="space-y-6">
             <h2
               className={`text-2xl font-semibold mb-6 ${
                 isDarkMode ? "text-gray-100" : "text-gray-800"
               }`}
             >
-              Found Email Variations
+              {response.valid_emails.length > 0
+                ? "Found Email Variations"
+                : "No Results Found"}
             </h2>
-            <div className="grid gap-6 md:grid-cols-2">
-              {response.valid_emails.map((email, index) => (
-                <div
-                  key={index}
-                  className={`backdrop-blur-lg rounded-xl p-6 shadow-xl
-                    hover:shadow-2xl hover:scale-[1.01] transition-all duration-300
-                    ${
-                      isDarkMode
-                        ? "bg-gray-800/40 border-gray-700/50"
-                        : "bg-white/80 border-gray-200"
-                    } border`}
-                >
-                  <div className="flex items-center space-x-4 mb-4">
-                    {email.avatar && (
-                      <Image
-                        src={email.avatar}
-                        alt="Avatar"
-                        width={48}
-                        height={48}
-                        className="rounded-full ring-2 ring-blue-500/30"
-                        onError={(e) => {
-                          const img = e.target as HTMLImageElement;
-                          img.src =
-                            "https://www.gravatar.com/avatar/default?d=mp";
-                        }}
-                      />
-                    )}
-                    <div>
-                      <h3 className="font-semibold text-gray-100">
-                        {email.full_name}
-                      </h3>
-                      <p className="text-sm text-blue-400">{email.email}</p>
+
+            {response.valid_emails.length > 0 ? (
+              <div className="grid gap-6 md:grid-cols-2">
+                {response.valid_emails.map((email, index) => (
+                  <div
+                    key={index}
+                    className={`backdrop-blur-lg rounded-xl p-6 shadow-xl
+                      hover:shadow-2xl hover:scale-[1.01] transition-all duration-300
+                      ${
+                        isDarkMode
+                          ? "bg-gray-800/40 border-gray-700/50"
+                          : "bg-white/80 border-gray-200"
+                      } border`}
+                  >
+                    <div className="flex items-center space-x-4 mb-4">
+                      {email.avatar && (
+                        <Image
+                          src={email.avatar}
+                          alt="Avatar"
+                          width={48}
+                          height={48}
+                          className="rounded-full ring-2 ring-blue-500/30"
+                          onError={(e) => {
+                            const img = e.target as HTMLImageElement;
+                            img.src =
+                              "https://www.gravatar.com/avatar/default?d=mp";
+                          }}
+                        />
+                      )}
+                      <div>
+                        <h3 className="font-semibold text-gray-100">
+                          {email.full_name}
+                        </h3>
+                        <p className="text-sm text-blue-400">{email.email}</p>
+                      </div>
+                    </div>
+                    <div className="space-y-3 border-t border-gray-700 pt-4">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-400">Deliverable:</span>
+                        <span
+                          className={`font-medium ${
+                            email.deliverable
+                              ? "text-green-400"
+                              : "text-red-400"
+                          }`}
+                        >
+                          {email.deliverable ? "Yes" : "No"}
+                        </span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-400">Score:</span>
+                        <span className="font-medium text-blue-400">
+                          {email.score}%
+                        </span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-400">Provider:</span>
+                        <span className="font-medium text-gray-300">
+                          {email.smtp_provider}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  <div className="space-y-3 border-t border-gray-700 pt-4">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-400">Deliverable:</span>
-                      <span
-                        className={`font-medium ${
-                          email.deliverable ? "text-green-400" : "text-red-400"
-                        }`}
-                      >
-                        {email.deliverable ? "Yes" : "No"}
-                      </span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-400">Score:</span>
-                      <span className="font-medium text-blue-400">
-                        {email.score}%
-                      </span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-400">Provider:</span>
-                      <span className="font-medium text-gray-300">
-                        {email.smtp_provider}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div
+                className={`backdrop-blur-lg rounded-xl p-8 text-center shadow-xl border
+                  ${
+                    isDarkMode
+                      ? "bg-gray-800/40 border-gray-700/50 text-gray-300"
+                      : "bg-white/80 border-gray-200 text-gray-600"
+                  }`}
+              >
+                <div className="mb-4 text-5xl">🔍</div>
+                <p className="text-lg mb-2">No email variations found</p>
+                <p className="text-sm opacity-75">
+                  We couldn't find any valid email variations for this name and
+                  domain combination.
+                </p>
+              </div>
+            )}
           </div>
         )}
       </div>
